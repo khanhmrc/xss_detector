@@ -5,9 +5,9 @@ from utils import GeneSeg
 from keras.models import load_model
 import numpy as np
 
-# Đường dẫn và tên tệp chứa mô hình và từ điển
-model_file = "G:/file/Conv_model.keras"
-#model_file = "G:/file/MLP_model.h5"
+# Model path
+#model_file = "G:/file/Conv_model.keras"
+model_file = "G:/file/MLP_model.keras"
 #model_file = "G:/file/LSTM_model.h5"
 vec_file = "G:/file/word2vec.pickle"
 
@@ -21,10 +21,9 @@ with open(vec_file, "rb") as f:
     reverse_dictionary = word2vec["reverse_dictionary"]
     embeddings = word2vec["embeddings"]
 # Câu đầu vào
-sentence = '<img/src/onerror=prompt(8)>'
 def check_xss(payload):
     # Tiền xử lý câu bằng hàm GeneSeg()
-    processed_sentence = GeneSeg(sentence)
+    processed_sentence = GeneSeg(payload)
     print(processed_sentence)
 
     max_length = 532  
@@ -47,6 +46,10 @@ def check_xss(payload):
     prediction = model.predict(input_matrix)
     print(prediction[0][1])
         # Lớp 1 (index 1) thể hiện tấn công XSS, lớp 0 (index 0) thể hiện không tấn công XSS
+    
+    #p = np.
+
+
     if prediction[0][1] > 0.5:
         print ("Payload chứa tấn công XSS")
         return 1
@@ -54,5 +57,5 @@ def check_xss(payload):
         print ("Payload không chứa tấn công XSS")
         return 0
     
-payload = '&#14&#14>!-->script>>script>>script>>script>top[/al/.source+/ert/`1`>/script>/drfv/>/script>/drfv/>/script>/drfv/>/script>/drfv/-->'
+payload = '&#14>!--InterferenceString>!--&#14&#14%00%00>img/src=vbscript%0A:top8680439..toString(30)(1)>>!--&#14&#14%00%00>img/src=vbscript%0A:top8680439..toString(30)(1)>-->-->'
 check_xss(payload)
